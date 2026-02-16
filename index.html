@@ -3,182 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>30 Day Ramadan Tracker</title>
+    <title>Ramadan Tracker | Hasin & Naja</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
-        .card { background: #1e293b; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
-        .accent-gold { color: #fbbf24; }
-        .checkbox-custom { width: 24px; height: 24px; accent-color: #fbbf24; cursor: pointer; }
-        select { background: #334155; color: white; border: 1px solid #475569; padding: 5px 10px; border-radius: 8px; }
+        :root {
+            --gold: #D4AF37;
+            --deep-blue: #0A172B;
+            --card-bg: #16243d;
+        }
+        body { 
+            background-color: var(--deep-blue); 
+            color: #e2e8f0; 
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at top right, #1e293b 0%, #0a172b 100%);
+        }
+        .arabic-font { font-family: 'Amiri', serif; }
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid #1e293b;
+            border-top: 3px solid var(--gold);
+            border-radius: 12px; 
+            padding: 1.25rem; 
+            margin-bottom: 1.5rem; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        }
+        .checkbox-custom { 
+            width: 20px; height: 20px; accent-color: var(--gold); cursor: pointer; 
+        }
+        .user-btn-active { background-color: var(--gold); color: black; box-shadow: 0 0 10px var(--gold); }
+        .sub-item { padding-left: 2rem; border-left: 1px dashed #334155; margin-left: 0.5rem; }
+        .accent-gold { color: var(--gold); }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-8 min-h-screen">
 
     <div class="max-w-md mx-auto">
-        <header class="text-center mb-6">
-            <h1 class="text-3xl font-bold accent-gold">Ramadan Tracker</h1>
-            <div class="mt-4 flex flex-col gap-3 items-center">
-                <div class="flex gap-2">
-                    <button onclick="switchUser('HASIN')" id="btn-HASIN" class="px-5 py-1 rounded-full font-bold bg-amber-500 text-white">HASIN</button>
-                    <button onclick="switchUser('NAJA')" id="btn-NAJA" class="px-5 py-1 rounded-full font-bold bg-slate-700 text-slate-300">NAJA</button>
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold accent-gold arabic-font mb-2">Ramadan Mubarak</h1>
+            <div class="flex flex-col gap-4 items-center">
+                <div class="inline-flex bg-slate-800 p-1 rounded-full">
+                    <button onclick="switchUser('HASIN')" id="btn-HASIN" class="px-6 py-1.5 rounded-full font-bold transition-all user-btn-active">HASIN</button>
+                    <button onclick="switchUser('NAJA')" id="btn-NAJA" class="px-6 py-1.5 rounded-full font-bold transition-all text-slate-400">NAJA</button>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-sm">Select Day:</span>
-                    <select id="day-select" onchange="loadData()">
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-semibold tracking-widest uppercase">Day</span>
+                    <select id="day-select" onchange="loadData()" class="bg-slate-800 text-white border border-slate-700 rounded-md px-3 py-1 outline-none focus:border-gold">
                         </select>
                 </div>
             </div>
         </header>
 
-        <div id="main-content">
-            <section class="card">
-                <h2 class="text-xl font-semibold mb-4 border-b border-slate-700 pb-2 flex justify-between">
-                    Swala <span id="progress-text" class="text-sm font-normal text-amber-400">0%</span>
+        <div id="tracker-body">
+            <div class="card">
+                <h2 class="text-xl font-bold accent-gold mb-4 flex items-center gap-2">
+                    🌙 Swala & Adkar
                 </h2>
-                <div class="grid grid-cols-1 gap-4" id="swala-list"></div>
-            </section>
+                <div id="prayer-container" class="space-y-4">
+                    </div>
+            </div>
 
-            <section class="card">
-                <h2 class="text-xl font-semibold mb-4 border-b border-slate-700 pb-2">Quran</h2>
-                <label class="block text-sm mb-2 text-slate-400">Juz' or Pages completed:</label>
-                <input type="text" id="quran-input" placeholder="e.g. Juz 1, Page 20" oninput="saveData()" 
-                       class="w-full bg-slate-900 border border-slate-700 rounded p-3 focus:outline-none focus:border-amber-500 text-white">
-            </section>
-
-            <section class="card">
-                <h2 class="text-xl font-semibold mb-4 border-b border-slate-700 pb-2 text-slate-200">Daily Duas</h2>
-                <div class="flex items-center justify-between">
-                    <span class="text-slate-300">Read Daily Duas?</span>
-                    <input type="checkbox" id="dua-check" onchange="saveData()" class="checkbox-custom">
+            <div class="card">
+                <h2 class="text-xl font-bold accent-gold mb-4">📖 Quran & Tech</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Quran Recitation</label>
+                        <input type="text" id="quran-input" placeholder="e.g. 1 Juz, 10 Pages" oninput="saveData()" 
+                               class="w-full bg-slate-900 border border-slate-700 rounded p-3 outline-none focus:border-gold">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Screen Time (Hours)</label>
+                        <input type="text" id="screen-input" placeholder="e.g. 2 hrs" oninput="saveData()" 
+                               class="w-full bg-slate-900 border border-slate-700 rounded p-3 outline-none focus:border-gold">
+                    </div>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
 
     <script>
         let currentUser = 'HASIN';
-        const prayers = ['Tahajjud', 'Subh', 'Luhr', 'Asar', 'Maghrib', 'Isha', 'Tharaveeh'];
-
-        // Generate Day 1 to 30 in the dropdown
-        function setupDaySelector() {
-            const select = document.getElementById('day-select');
-            for (let i = 1; i <= 30; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.innerHTML = `Day ${i}`;
-                select.appendChild(opt);
-            }
-        }
+        const structure = {
+            'Thahajjud': [],
+            'Subh': ['Sunnah', 'Adkar', 'Dua'],
+            'Duhr': ['Sunnah', 'Adkar', 'Dua'],
+            'Asr': ['Adkar', 'Dua'],
+            'Magrib': ['Sunnah', 'Adkar', 'Dua'],
+            'Isha': ['Sunnah', 'Adkar', 'Dua'],
+            'Tharaweeh': []
+        };
 
         function init() {
-            setupDaySelector();
-            const list = document.getElementById('swala-list');
-            list.innerHTML = prayers.map(p => `
-                <div class="flex justify-between items-center bg-slate-800/50 p-3 rounded-lg">
-                    <label for="${p}" class="font-medium text-slate-200">${p}</label>
-                    <input type="checkbox" id="${p}" onchange="saveData()" class="checkbox-custom">
-                </div>
-            `).join('');
-            loadData();
-        }
+            // Setup Day Dropdown
+            const ds = document.getElementById('day-select
 
-        function switchUser(user) {
-            currentUser = user;
-            document.getElementById('btn-HASIN').className = user === 'HASIN' ? 'px-5 py-1 rounded-full font-bold bg-amber-500 text-white' : 'px-5 py-1 rounded-full font-bold bg-slate-700 text-slate-300';
-            document.getElementById('btn-NAJA').className = user === 'NAJA' ? 'px-5 py-1 rounded-full font-bold bg-amber-500 text-white' : 'px-5 py-1 rounded-full font-bold bg-slate-700 text-slate-300';
-            loadData();
-        }
-
-        function saveData() {
-            const day = document.getElementById('day-select').value;
-            const data = {
-                quran: document.getElementById('quran-input').value,
-                dua: document.getElementById('dua-check').checked,
-                prayers: {}
-            };
-            prayers.forEach(p => {
-                data.prayers[p] = document.getElementById(p).checked;
-            });
-
-            // Store with a key that includes the User AND the Day
-            localStorage.setItem(`ramadan_${currentUser}_day${day}`, JSON.stringify(data));
-            updateProgress();
-        }
-
-        function loadData() {
-            const day = document.getElementById('day-select').value;
-            const saved = localStorage.getItem(`ramadan_${currentUser}_day${day}`);
-            
-            // Clear current view first
-            document.getElementById('quran-input').value = '';
-            document.getElementById('dua-check').checked = false;
-            prayers.forEach(p => document.getElementById(p).checked = false);
-
-            if (saved) {
-                const data = JSON.parse(saved);
-                document.getElementById('quran-input').value = data.quran || '';
-                document.getElementById('dua-check').checked = data.dua || false;
-                prayers.forEach(p => {
-                    if (data.prayers && data.prayers[p]) {
-                        document.getElementById(p).checked = data.prayers[p];
-                    }
-                });
-            }
-            updateProgress();
-        }
-
-        function updateProgress() {
-            const checked = prayers.filter(p => document.getElementById(p).checked).length;
-            const percent = Math.round((checked / prayers.length) * 100);
-            document.getElementById('progress-text').innerText = `${percent}% Done`;
-        }
-
-        init();
-    </script>
-</body>
-</html>
-            `).join('');
-            loadData();
-        }
-
-        function switchUser(user) {
-            currentUser = user;
-            document.getElementById('btn-HASIN').className = user === 'HASIN' ? 'px-6 py-2 rounded-full font-bold bg-amber-500 text-white' : 'px-6 py-2 rounded-full font-bold bg-slate-700 text-slate-300';
-            document.getElementById('btn-NAJA').className = user === 'NAJA' ? 'px-6 py-2 rounded-full font-bold bg-amber-500 text-white' : 'px-6 py-2 rounded-full font-bold bg-slate-700 text-slate-300';
-            loadData();
-        }
-
-        function saveData() {
-            const data = {
-                quran: document.getElementById('quran-input').value,
-                dua: document.getElementById('dua-check').checked,
-                prayers: {}
-            };
-            prayers.forEach(p => {
-                data.prayers[p] = document.getElementById(p).checked;
-            });
-            localStorage.setItem(`ramadan_${currentUser}`, JSON.stringify(data));
-        }
-
-        function loadData() {
-            const saved = localStorage.getItem(`ramadan_${currentUser}`);
-            if (saved) {
-                const data = JSON.parse(saved);
-                document.getElementById('quran-input').value = data.quran || '';
-                document.getElementById('dua-check').checked = data.dua || false;
-                prayers.forEach(p => {
-                    document.getElementById(p).checked = data.prayers[p] || false;
-                });
-            } else {
-                // Reset form for new user if no data
-                document.getElementById('quran-input').value = '';
-                document.getElementById('dua-check').checked = false;
-                prayers.forEach(p => document.getElementById(p).checked = false);
-            }
-        }
-
-        init();
-    </script>
-</body>
-</html>
